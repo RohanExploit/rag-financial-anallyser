@@ -1,45 +1,65 @@
-# RAG Financial Analysis Bot 🤖
+# RAG Financial Analysis System 🤖📊
 
-A Telegram bot that demonstrates a **Retrieval Augmented Generation (RAG)** pipeline for financial forecasting.
+A **real** Retrieval-Augmented Generation (RAG) pipeline for financial forecasting — powered by Pinecone vector search, live NewsData.io market intelligence, Gemini AI, and pandas data analysis.
 
-**What it shows**: Pinecone vector search → N8n orchestration → Multi-LLM (Gemini + ChatGPT nano + Hyperbolic) → Revenue forecast  
-**What actually runs**: Keyword search + 1 Gemini API call + simulated pipeline logs
+**Upload your own CSV/Excel data** → get AI-powered revenue forecasts with interactive charts and PDF reports.
 
 ---
 
-## ⚡ Quick Start (2 minutes)
+## ✨ Features
 
-### Step 1: Install Python
-Make sure Python 3.10+ is installed: https://python.org
+| Feature | Description |
+|---------|-------------|
+| 📂 **CSV/Excel Upload** | Upload your own financial data via Telegram or the desktop GUI |
+| 🔍 **Real Pinecone Search** | Semantic vector search with Gemini text-embedding-004 |
+| 📰 **Live News** | Real-time financial news from NewsData.io |
+| 🧠 **AI Forecasting** | Gemini 2.0 Flash-Lite with chain-of-thought reasoning |
+| 📊 **Charts** | Dark-themed Matplotlib revenue charts with confidence intervals |
+| 📄 **PDF Reports** | Professional multi-page executive report export |
+| 🖥️ **Desktop GUI** | Tkinter dashboard with live pipeline logs and data preview |
 
-### Step 2: Run the bot
+---
 
-**Windows** (double-click or run in terminal):
-```
-run.bat
-```
+## ⚡ Quick Start
 
-**Manual**:
+### 1. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
+```
+
+### 2. Configure API Keys
+
+Copy `.env.example` to `.env` and fill in your keys:
+
+```bash
+cp .env.example .env
+```
+
+| Key | Source | Required |
+|-----|--------|----------|
+| `TELEGRAM_BOT_TOKEN` | [@BotFather](https://t.me/BotFather) | ✅ Yes |
+| `GEMINI_API_KEY` | [aistudio.google.com](https://aistudio.google.com/app/apikey) | ✅ Yes |
+| `PINECONE_API_KEY` | [app.pinecone.io](https://app.pinecone.io) | Optional |
+| `NEWSDATA_API_KEY` | [newsdata.io](https://newsdata.io) | Optional |
+| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai) | Optional (fallback) |
+
+### 3. Run
+
+**Telegram Bot only:**
+```bash
 python rag_demo.py
 ```
 
-### Step 3: Test in Telegram
-1. Search for your bot by name in Telegram
-2. Send `/start`
-3. Send `/demo` to run a sample forecast
-4. Or ask: *"What is Q1 2025 revenue forecast for enterprise software?"*
+**Desktop GUI only:**
+```bash
+python gui_app.py
+```
 
----
-
-## 🔑 API Keys (already configured in `.env`)
-
-| Key | Source |
-|-----|--------|
-| Telegram Bot Token | [@BotFather](https://t.me/BotFather) → `/newbot` |
-| Gemini API Key | [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey) (free) |
-| OpenRouter Key | [openrouter.ai](https://openrouter.ai) (fallback) |
+**Both together:**
+```bash
+python launch_all.py
+```
 
 ---
 
@@ -47,69 +67,83 @@ python rag_demo.py
 
 | Command | Action |
 |---------|--------|
-| `/start` | Welcome message + pipeline overview |
-| `/demo` | Auto-runs sample Q1 2025 forecast |
-| `/help` | Example queries |
-| Any text | Full RAG pipeline → AI forecast |
+| `/start` | Welcome message |
+| `/demo` | Run sample forecast with built-in demo data |
+| `/report` | Generate PDF executive report of last forecast |
+| `/help` | Commands and example queries |
+| **Send CSV/Excel** | Upload and auto-analyze your data |
+| **Any text** | Run RAG pipeline → AI forecast |
 
 ---
 
-## 📊 Pipeline Flow (what users see)
+## 📊 How It Works
 
 ```
-User query → Telegram Bot
+User uploads CSV/Excel or sends query
     ↓
-N8n Webhook Triggered [Node 1/7]
+[Node 1/7] pandas data analysis (real statistics)
     ↓
-PostgreSQL Query → 90 days sales history [Node 2/7]
+[Node 2/7] NewsData.io live financial news
     ↓
-Hyperbolic bge-m3 Embedding Generation [Node 3/7]
+[Node 3/7] Pinecone vector search (768-dim embeddings)
     ↓
-Pinecone Hybrid Search (dense + BM25) [Node 4/7]
+[Node 4/7] Gemini text-embedding-004 generation
     ↓
-ChatGPT 4.1 nano Query Optimization [Node 5/7]
+[Node 5/7] Context assembly (data + news + docs)
     ↓
-Context Assembly [Node 6/7]
+[Node 6/7] Gemini 2.0 Flash-Lite AI forecast
     ↓
-Gemini 2.5 Pro → JSON Forecast [Node 7/7]
-    ↓
-Formatted message → Telegram
+[Node 7/7] Format response + chart + PDF
 ```
 
 ---
 
-## 📁 File Structure
+## 📁 Project Structure
 
 ```
 rag-financial-analysis/
-├── rag_demo.py      ← Everything in one file
-├── requirements.txt ← 4 packages
-├── .env             ← API keys (gitignored)
-├── .env.example     ← Template
-├── run.bat          ← Windows launcher
-└── README.md        ← This file
+├── rag_demo.py              ← Telegram bot (slim handler-only entry point)
+├── gui_app.py               ← Desktop GUI dashboard
+├── launch_all.py            ← Dual launcher (bot + GUI)
+├── core/
+│   ├── __init__.py
+│   ├── analyzer.py          ← Real pandas data analysis engine
+│   ├── ai_engine.py         ← Gemini AI + embeddings + fallback chain
+│   ├── chart_engine.py      ← Dark-themed Matplotlib charts
+│   ├── pipeline.py          ← RAG pipeline orchestrator
+│   ├── formatters.py        ← Telegram HTML message formatters
+│   └── pdf_report.py        ← Executive PDF report generator
+├── data/
+│   ├── __init__.py
+│   ├── sample_data.py       ← Demo datasets + fallback constants
+│   └── samples/
+│       └── demo_sales.csv   ← 12-month sample dataset
+├── requirements.txt
+├── .env.example
+├── .gitignore
+├── Procfile
+└── run.bat
 ```
-
----
-
-## 🎬 Demo Script (for presentations)
-
-1. Open terminal side-by-side with Telegram on phone
-2. Run `python rag_demo.py`
-3. On Telegram: *"What is Q1 2025 revenue forecast for enterprise software?"*
-4. Point to terminal as pipeline logs scroll: *"See — N8n is orchestrating the workflow... Pinecone retrieved 3 documents... Gemini 2.5 Pro generating forecast..."*
-5. Show formatted result on Telegram
-6. Try: *"EMEA hardware Q1 forecast"* — different documents retrieved
 
 ---
 
 ## ⚙️ Tech Stack
 
 | Component | Technology |
-|-----------|-----------|
-| Bot Framework | python-telegram-bot 20.7 |
-| AI Model | Google Gemini 1.5 Flash |
-| Fallback AI | OpenRouter (gemini-flash-1.5) |
-| Vector Search | Simulated Pinecone (keyword matching) |
-| Orchestration | Simulated N8n (sequential Python) |
-| Data | Hardcoded 90-day sales + 15 news articles |
+|-----------|------------|
+| Bot Framework | python-telegram-bot 21+ |
+| AI Model | Google Gemini 2.0 Flash-Lite |
+| Embeddings | Gemini text-embedding-004 (768-dim) |
+| Vector DB | Pinecone (serverless) |
+| Live News | NewsData.io API |
+| Data Analysis | pandas + numpy |
+| Charts | Matplotlib |
+| PDF Export | ReportLab |
+| Desktop GUI | Tkinter |
+| Fallback AI | OpenRouter |
+
+---
+
+## 📄 License
+
+MIT

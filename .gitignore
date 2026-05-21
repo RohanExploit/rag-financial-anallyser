@@ -1,4 +1,26 @@
+# Environment
 .env
+
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+
+# OS
 .DS_Store
+Thumbs.db
+
+# User uploads & generated files
+uploads/
+*.pdf
+!data/samples/*.csv
+
+# IDE
+.idea/
+.vscode/
+*.swp

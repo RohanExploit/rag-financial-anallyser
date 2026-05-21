@@ -1,0 +1,13 @@
+date,region,product,revenue,units_sold,deal_size
+2024-02-01,North America,Enterprise Software,3200000,18,177778
+2024-03-01,North America,Enterprise Software,3350000,19,176316
+2024-04-01,North America,Enterprise Software,3400000,19,178947
+2024-05-01,North America,Enterprise Software,3500000,20,175000
+2024-06-01,North America,Enterprise Software,3550000,21,169048
+2024-07-01,North America,Enterprise Software,3600000,21,171429
+2024-08-01,North America,Enterprise Software,3700000,22,168182
+2024-09-01,North America,Enterprise Software,3750000,22,170455
+2024-10-01,North America,Enterprise Software,3800000,22,172727
+2024-11-01,North America,Enterprise Software,4100000,24,170833
+2024-12-01,North America,Enterprise Software,4450000,27,164815
+2025-01-01,North America,Enterprise Software,4600000,28,164286
